@@ -22,6 +22,21 @@
  * THE SOFTWARE.
  */
 
+#include <linux/kernel.h>
+#include <linux/errno.h>
+#include <linux/slab.h>
+#include <linux/module.h>
+#include <linux/kref.h>
+#include <linux/uaccess.h>
+#include <linux/version.h>
+#include <linux/usb.h>
+#include <linux/mutex.h>
+#include <linux/usb/ch9.h>
+#include <linux/io.h>
+#include <linux/ioctl.h>
+#include <linux/delay.h>
+#include "wixusb_driver_types.h"
+#include "wixusb_ioctl.h"
 
 #ifndef DEBUG
 #define DEBUG
@@ -565,14 +580,10 @@ error:
     return retval;
 }
 
-int
-wixusb_ioctl(struct usb_interface *intf, unsigned int code, void *buf) {
-    return -1;
-}
 
 static void
 wixusb_disconnect(struct usb_interface *interface) {
-    struct usb_wixusb_ *dev;
+    struct usb_wixusb *dev;
     int minor = interface->minor;
 
     dev = usb_get_intfdata(interface);
