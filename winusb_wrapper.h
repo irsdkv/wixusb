@@ -22,33 +22,46 @@
  * THE SOFTWARE.
  */
 
-#ifndef WIXUSB_IOCTL_H
-#define WIXUSB_IOCTL_H
+#ifndef WINUSB_WRAP_H
+#define WINUSB_WRAP_H
 
+#include <stdbool.h>
+#include <stdint.h>
 #include "wixusb_driver_types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define WIXUSB_IOC_MAGIC      ('M' + 0)
+int Sleep(int time);
 
-typedef struct {
-    char length;
-    char data[EP_SIZE];
-}wixusb_intrpt_packet;
+int WinUsb_Connect(void);
 
-#define IOCTL_SEND_CTRL            _IOW( WIXUSB_IOC_MAGIC, 0, wixusb_ctrl_packet_t )
-#define IOCTL_RECV_CTRL            _IOWR( WIXUSB_IOC_MAGIC, 1, wixusb_ctrl_packet_t )
-#define IOCTL_GET_DESC             _IOWR( WIXUSB_IOC_MAGIC, 2, wixusb_get_desc_t )
-#define IOCTL_SET_PIPE_POL         _IOW( WIXUSB_IOC_MAGIC, 3, wixusb_set_pipe_policy_t )
-#define IOCTL_GET_VID_PID          _IOR( WIXUSB_IOC_MAGIC, 5, wixusb_vid_pid_t )
-#define IOCTL_IS_CONNECTED         _IO( WIXUSB_IOC_MAGIC, 6)
-#define IOCTL_WRITE_INT            _IOW( WIXUSB_IOC_MAGIC, 7, wixusb_intrpt_packet )
+bool CheckConnected(unsigned long deviceFd);
 
+int WinUsb_GetDescriptor(int fd, uint8_t DescriptorType, uint8_t Index,
+        uint16_t LanguageID, uint8_t * Buffer,
+        uint32_t BufferLength,
+        uint32_t * LengthTransferred);
+
+int WinUsb_SetPipePolicy(int fd, uint8_t PipeID, uint32_t PolicyType,
+        uint32_t ValueLength, void * Value);
+
+/* WinUsb_ReadPipe*/
+int WixUsb_ReadBulk(int InterfaceHandle, void * Buffer,
+        uint32_t BufferLength, uint32_t * LengthTransferred);
+
+
+/* WinUsb_WritePipe*/
+int WixUsb_WriteBulk(int InterfaceHandle, PUCHAR Buffer,
+        ULONG BufferLength, PULONG LengthTransferred);
+
+BOOL WinUsb_ControlTransfer(int InterfaceHandle,
+        WINUSB_SETUP_PACKET SetupPacket, PUCHAR Buffer, ULONG BufferLength,
+        PULONG LengthTransferred, LPOVERLAPPED Overlapped);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* WIXUSB_IOCTL_H */
+#endif /* WINUSB_WRAP_H */

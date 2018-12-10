@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Ildar Sadykov.
+ * Copyright 2017 Ildar Sadykov <irsdkv@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ extern "C" {
 
 #define _Out_bytecap_(size)
 #define _In_
-#define _Out_opt_ 
+#define _Out_opt_
 #define _Out_
 #define _Inout_
 #define TRUE                    true
@@ -54,7 +54,7 @@ extern "C" {
 #define LPTSTR                  ULONG
 #define USHORT                  uint16_t
 #define FAILED(x)               (x < 0)
-#define BYTE                    uint8_t 
+#define BYTE                    uint8_t
 #define PBYTE                   BYTE *
 #define PUCHAR                  UCHAR *
 #define PULONG                  ULONG *
@@ -67,13 +67,17 @@ extern "C" {
 
 #define WIXUSB_IO_BUFFSIZE        256
 
+#ifndef WIXUSB_DEV_NAME
+#define WIXUSB_DEV_NAME              "wixusb-dev"
+#endif
+
 #define CTRL_BUFF_LENGTH        128
 #define DESC_BUFF_LENGTH        128
 #define BULK_BUFF_LENGTH        4096
 
 #define SETUP_PACKET_IS_INPUT(bmRequestType)  ((bmRequestType & (1 << 7) ? 1 : 0))
 
-    
+
 typedef struct _WINUSB_SETUP_PACKET {
     UCHAR RequestType;
     UCHAR Request;
@@ -93,7 +97,7 @@ typedef enum  {
     INTERFACE_POWER = 0x08, // Дескриптор управления питанием интерфейса
     OTG = 0x09, // Дескриптор OTG
     DEBUG = 0x0A, // Отладочный дескриптор
-    INTERFACE_ASSOCIATION = 0x0B, // Дополнительный дескриптор интерфейса	
+    INTERFACE_ASSOCIATION = 0x0B, // Дополнительный дескриптор интерфейса
 }USB_DESCRIPTOR_TYPES;
 
 typedef enum {
@@ -145,4 +149,3 @@ typedef struct _USB_DEVICE_DESCRIPTOR {
 #endif
 
 #endif /* WIXUSB_DRIVER_TYPES_H */
-

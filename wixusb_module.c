@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 Ildar Sadykov.
+ * Copyright 2017 Ildar Sadykov <irsdkv@gmail.com>.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,9 +44,6 @@
 
 #ifndef WIXUSB_DRV_NAME
 #define WIXUSB_DRV_NAME              "WIXUSB"
-#endif
-#ifndef WIXUSB_DEV_NAME
-#define WIXUSB_DEV_NAME              "wixusb-dev"
 #endif
 
 #ifndef VENDOR_ID
@@ -125,7 +122,7 @@ wixusb_open(struct inode *inode, struct file *file) {
         retval = -ENODEV;
         goto exit;
     }
-    
+
     /* increment our usage count for the device */
     kref_get(&dev->kref);
 
@@ -320,7 +317,7 @@ wixusb_ioctl(struct file *file, unsigned int cmd, unsigned long arg) {
     dev = file->private_data;
 
     mutex_lock(&dev->io_mutex);
-    
+
     if (!dev->interface)
     {
         retval = -ENODEV;
